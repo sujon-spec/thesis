@@ -58,6 +58,8 @@ input,textarea,select{font-family:inherit;color:inherit}
 
 /* ── LAYOUT ── */
 .app{display:grid;grid-template-columns:280px 1fr;height:100vh;width:100%}
+.auth-locked .app,
+.auth-locked .modal-backdrop{display:none}
 .sidebar{
   background:linear-gradient(180deg,var(--bg-1),var(--bg-0));
   border-right:1px solid var(--line);
@@ -253,6 +255,193 @@ input,textarea,select{font-family:inherit;color:inherit}
   color:var(--ink-dim);
 }
 .btn-ghost:hover{background:var(--bg-3);color:var(--ink)}
+.session-pill,
+.sync-pill{
+  height:32px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:0 11px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--bg-2);
+  color:var(--ink-dim);
+  font-size:11.5px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.sync-pill::before{
+  content:'';
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--c-progress);
+  box-shadow:0 0 8px currentColor;
+}
+.sync-pill.online::before,
+.sync-pill.saved::before{background:var(--c-done)}
+.sync-pill.syncing::before{background:var(--c-todo)}
+.sync-pill.error::before{background:var(--c-red)}
+
+/* ── LOGIN ── */
+.login-screen{
+  min-height:100vh;
+  display:none;
+  place-items:center;
+  padding:28px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(212,169,86,.12), transparent 38%),
+    radial-gradient(circle at 88% 100%, rgba(91,141,239,.11), transparent 42%),
+    var(--bg-0);
+}
+.auth-locked .login-screen{display:grid}
+.login-card{
+  width:min(940px,100%);
+  display:grid;
+  grid-template-columns:1fr 430px;
+  overflow:hidden;
+  border:1px solid var(--line-bright);
+  border-radius:18px;
+  background:var(--bg-1);
+  box-shadow:var(--shadow-lg);
+}
+.login-brand{
+  padding:42px;
+  background:linear-gradient(135deg,var(--bg-1),var(--bg-2));
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:520px;
+}
+.login-mark{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;
+  place-items:center;
+  color:#1a1407;
+  font-family:'Fraunces',serif;
+  font-size:25px;
+  font-weight:800;
+  margin-bottom:24px;
+}
+.login-eyebrow{
+  color:var(--accent-2);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  font-weight:800;
+  margin-bottom:10px;
+}
+.login-title{
+  font-family:'Fraunces',serif;
+  font-size:34px;
+  line-height:1.12;
+  letter-spacing:-.02em;
+  max-width:430px;
+}
+.login-copy{
+  color:var(--ink-dim);
+  margin-top:12px;
+  max-width:430px;
+}
+.login-points{
+  display:grid;
+  gap:10px;
+  margin-top:30px;
+}
+.login-point{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--ink-dim);
+  font-size:13px;
+}
+.login-point::before{
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:3px;
+  background:var(--accent);
+  box-shadow:0 0 10px rgba(212,169,86,.45);
+}
+.login-form{
+  padding:38px;
+  display:flex;
+  flex-direction:column;
+}
+.login-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  padding:5px;
+  background:var(--bg-0);
+  border:1px solid var(--line);
+  border-radius:11px;
+  margin-bottom:24px;
+}
+.login-tab{
+  height:38px;
+  border-radius:8px;
+  color:var(--ink-mute);
+  font-weight:800;
+  font-size:12.5px;
+}
+.login-tab.active{
+  background:var(--bg-3);
+  color:var(--ink);
+  box-shadow:var(--shadow-sm);
+}
+.login-field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-bottom:16px;
+}
+.login-field label{
+  font-size:11px;
+  color:var(--ink-mute);
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  font-weight:800;
+}
+.login-field input,
+.login-field select{
+  width:100%;
+  min-width:0;
+  height:44px;
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  color:var(--ink);
+  border-radius:9px;
+  padding:0 13px;
+  outline:none;
+}
+.login-field input:focus,
+.login-field select:focus{
+  border-color:var(--accent);
+  background:var(--bg-3);
+}
+.login-error{
+  min-height:20px;
+  color:var(--c-red);
+  font-size:12px;
+  font-weight:700;
+  margin:-4px 0 12px;
+}
+.login-submit{
+  width:100%;
+  height:44px;
+  justify-content:center;
+}
+.password-hint{
+  margin-top:14px;
+  color:var(--ink-mute);
+  font-size:11.5px;
+  line-height:1.5;
+}
 
 /* ── BOARD ── */
 .board-wrap{
@@ -870,12 +1059,58 @@ input,textarea,select{font-family:inherit;color:inherit}
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
+  .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:12px;gap:10px}
+  .search-box{width:100%;order:5}
+  .session-pill,.sync-pill{height:30px}
+  .login-card{grid-template-columns:1fr;max-width:520px}
+  .login-brand{display:none}
+  .login-form{padding:28px}
   .modal-body{grid-template-columns:1fr}
   .hero-stats{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
-<body>
+<body class="auth-locked">
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <section class="login-brand">
+      <div>
+        <div class="login-mark">α</div>
+        <div class="login-eyebrow">IUT Thesis Tracker</div>
+        <h1 class="login-title">Research groups, progress, and supervisor visibility in one place.</h1>
+        <p class="login-copy">Students enter their own thesis group board. Supervisor access opens every group, every task, and every progress signal.</p>
+        <div class="login-points">
+          <div class="login-point">Group-specific task boards</div>
+          <div class="login-point">Live progress tracking</div>
+          <div class="login-point">Supervisor overview across all groups</div>
+        </div>
+      </div>
+      <div class="password-hint">Use the password issued for your thesis group. Supervisor password remains unchanged.</div>
+    </section>
+
+    <section class="login-form">
+      <div class="login-tabs">
+        <button class="login-tab active" id="groupLoginTab" type="button" onclick="setLoginMode('group')">Student Group</button>
+        <button class="login-tab" id="supervisorLoginTab" type="button" onclick="setLoginMode('supervisor')">Supervisor</button>
+      </div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="login-field" id="groupLoginField">
+          <label for="loginGroup">Thesis Group</label>
+          <select id="loginGroup"></select>
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter password" />
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button class="btn btn-primary login-submit" type="submit">Open Tracker</button>
+      </form>
+
+      <p class="password-hint" id="loginHint">Group passwords are based on each project short name and include a special character.</p>
+    </section>
+  </div>
+</div>
 <div class="app">
 
   <!-- ────── SIDEBAR ────── -->
@@ -892,11 +1127,11 @@ input,textarea,select{font-family:inherit;color:inherit}
 
     <div class="nav-section">
       <div class="nav-label">Workspace</div>
-      <div class="nav-item active" data-view="overview" onclick="setView('overview')">
+      <div class="nav-item active" data-view="overview" data-supervisor-only onclick="setView('overview')">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Overview
       </div>
-      <div class="nav-item" data-view="all-tasks" onclick="setView('all-tasks')">
+      <div class="nav-item" data-view="all-tasks" data-supervisor-only onclick="setView('all-tasks')">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
         All Tasks
       </div>
@@ -921,6 +1156,8 @@ input,textarea,select{font-family:inherit;color:inherit}
         <div class="page-subtitle" id="pageSub">All groups · all activity</div>
       </div>
       <div class="topbar-spacer"></div>
+      <div class="sync-pill" id="syncPill">Local only</div>
+      <div class="session-pill" id="sessionPill">Not signed in</div>
       <div class="search-box">
         <input id="searchInput" placeholder="Search tasks, students, tags…" oninput="onSearch()" />
       </div>
@@ -932,6 +1169,7 @@ input,textarea,select{font-family:inherit;color:inherit}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New Task
       </button>
+      <button class="btn btn-ghost" onclick="logout()" title="Sign out">Sign out</button>
     </div>
 
     <div id="content"></div>
@@ -962,6 +1200,29 @@ const GROUPS = [
   {id:6,color:'#3ec9c0',accent:'rgba(62,201,192,.15)',title:'Machine Learning-Driven Optimization of Polymer Nanocomposites for Heat Exchangers',short:'Polymer Nanocomposite Opt.',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Junaid Rahman Fahim',id:'210011267'},{name:'Tasfia Chowdhury',id:'210011164'}]},
   {id:7,color:'#d4a956',accent:'rgba(212,169,86,.15)',title:'Effect of NiFe-LDH on Wood Flour-Reinforced Epoxy Hybrid Nanocomposites',short:'NiFe-LDH Epoxy Composite',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Juhair Mahatab Ullah Aninda',id:'210011254'},{name:'Nafis Ayman',id:'210011281'}]},
 ];
+
+const SUPERVISOR_PASSWORD = 'Ariya@2019';
+const GROUP_PASSWORDS = {
+  1:'ThermoGNN@2026',
+  2:'FDMPropertyML#2026',
+  3:'SkinPermML@2026',
+  4:'PLATensileML#2026',
+  5:'PhononicMeta@2026',
+  6:'PolyNanoOpt#2026',
+  7:'NiFeLDH@2026',
+};
+const SESSION_KEY = 'thesis_tracker:session';
+const CARD_STORAGE_KEY = 'thesis_tracker:cards';
+const FIREBASE_SDK_VERSION = '10.12.5';
+const FIREBASE_CONFIG = window.THESIS_FIREBASE_CONFIG || {
+  apiKey: "AIzaSyCmC7_ZsW068Q3v5vLJ0SSPmwz6JSId_Os",
+  authDomain: "thesis2026-32c0a.firebaseapp.com",
+  projectId: "thesis2026-32c0a",
+  storageBucket: "thesis2026-32c0a.firebasestorage.app",
+  messagingSenderId: "906777631502",
+  appId: "1:906777631502:web:542888121316161819d55f",
+};
+const FIRESTORE_COLLECTION = 'thesistrack';
 
 const COLUMNS = [
   {id:'backlog',  label:'Backlog',     color:'#6b7385'},
@@ -1034,19 +1295,162 @@ let state = {
   filterPriority:null,
   filterAssignee:null,
 };
+let session = readSession();
 let currentCardId = null;
 let saveTimeout = null;
+let cloudWriteTimer = null;
+let cloudApplyingRemote = false;
+let cloudStarted = false;
+let cloud = {
+  status:'local',
+  modules:null,
+  app:null,
+  db:null,
+  doc:null,
+  setDoc:null,
+  serverTimestamp:null,
+  unsubscribers:[],
+};
+
+// Login/session helpers
+function readSession(){
+  try{
+    const saved = localStorage.getItem(SESSION_KEY);
+    return saved ? JSON.parse(saved) : null;
+  }catch(e){ return null; }
+}
+
+function isSupervisor(){
+  return session?.role === 'supervisor';
+}
+
+function sessionGroupId(){
+  return session?.role === 'group' ? Number(session.groupId) : null;
+}
+
+function canAccessGroup(gid){
+  return isSupervisor() || Number(gid) === sessionGroupId();
+}
+
+function visibleGroups(){
+  return isSupervisor() ? GROUPS : GROUPS.filter(g => g.id === sessionGroupId());
+}
+
+function visibleCards(){
+  return getAllCards().filter(c => canAccessGroup(c.groupId));
+}
+
+function groupDocId(gid){
+  return `group-${String(gid).padStart(2,'0')}`;
+}
+
+function sessionLabel(){
+  if(isSupervisor()) return 'Supervisor';
+  const g = getGroup(sessionGroupId());
+  return g ? `Group ${g.id} · ${g.short}` : 'Student group';
+}
+
+function setLoginMode(mode){
+  const isGroup = mode !== 'supervisor';
+  document.getElementById('groupLoginTab').classList.toggle('active', isGroup);
+  document.getElementById('supervisorLoginTab').classList.toggle('active', !isGroup);
+  document.getElementById('groupLoginField').style.display = isGroup ? 'flex' : 'none';
+  document.getElementById('loginHint').textContent = isGroup
+    ? 'Group passwords are based on each project short name and include a special character.'
+    : 'Use the same supervisor password as the Capstone tracker.';
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginPassword').focus();
+  window.__loginMode = isGroup ? 'group' : 'supervisor';
+}
+
+function renderLoginGroups(){
+  const sel = document.getElementById('loginGroup');
+  if(!sel) return;
+  sel.innerHTML = GROUPS.map(g => (
+    `<option value="${g.id}">Group ${g.id} · ${escapeHtml(g.short)}</option>`
+  )).join('');
+}
+
+function handleLogin(event){
+  event.preventDefault();
+  const mode = window.__loginMode || 'group';
+  const password = document.getElementById('loginPassword').value.trim();
+  const error = document.getElementById('loginError');
+  if(mode === 'supervisor'){
+    if(password === SUPERVISOR_PASSWORD){
+      startSession({ role:'supervisor' });
+    }else{
+      error.textContent = 'Wrong supervisor password.';
+    }
+    return;
+  }
+
+  const groupId = Number(document.getElementById('loginGroup').value);
+  if(password === GROUP_PASSWORDS[groupId]){
+    startSession({ role:'group', groupId });
+  }else{
+    error.textContent = 'Wrong group password. Please use the password issued for this thesis project.';
+  }
+}
+
+function startSession(nextSession){
+  session = nextSession;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  state.view = isSupervisor() ? 'overview' : `group:${sessionGroupId()}`;
+  state.searchTerm = '';
+  state.filterPriority = null;
+  state.filterAssignee = null;
+  const search = document.getElementById('searchInput');
+  if(search) search.value = '';
+  applySessionUi();
+  connectCloud();
+  rerender();
+}
+
+function logout(){
+  disconnectCloud();
+  session = null;
+  localStorage.removeItem(SESSION_KEY);
+  document.body.classList.add('auth-locked');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').textContent = '';
+  setLoginMode('group');
+  setCloudStatus('local');
+}
+
+function applySessionUi(){
+  const locked = !session;
+  document.body.classList.toggle('auth-locked', locked);
+  document.querySelectorAll('[data-supervisor-only]').forEach(el => {
+    el.style.display = isSupervisor() ? 'flex' : 'none';
+  });
+  const pill = document.getElementById('sessionPill');
+  if(pill) pill.textContent = session ? sessionLabel() : 'Not signed in';
+}
+
+function normalizeView(view){
+  if(!session) return view || 'overview';
+  if(isSupervisor()) return view || 'overview';
+  return `group:${sessionGroupId()}`;
+}
 
 // Storage helpers
 async function storageGet(key){
   try{
-    const r = await window.storage.get(key);
-    return r ? JSON.parse(r.value) : null;
+    const local = localStorage.getItem(key);
+    if(local) return JSON.parse(local);
+    if(window.storage){
+      const r = await window.storage.get(key);
+      return r ? JSON.parse(r.value) : null;
+    }
+    return null;
   }catch(e){ return null; }
 }
 async function storageSet(key, val){
   try{
-    await window.storage.set(key, JSON.stringify(val));
+    localStorage.setItem(key, JSON.stringify(val));
+    if(window.storage) await window.storage.set(key, JSON.stringify(val));
     return true;
   }catch(e){
     return false;
@@ -1056,7 +1460,7 @@ async function storageSet(key, val){
 function uid(){ return 'c_'+Math.random().toString(36).slice(2,11); }
 
 async function loadState(){
-  const saved = await storageGet('thesis_tracker:cards');
+  const saved = await storageGet(CARD_STORAGE_KEY);
   if(saved && Object.keys(saved).length){
     state.cards = saved;
   }else{
@@ -1070,9 +1474,8 @@ function seedDefaults(){
   GROUPS.forEach(g=>{
     const tasks = SEED_TASKS[g.id] || [];
     tasks.forEach((t,idx)=>{
-      const id = uid();
-      const dueDays = 7 + idx*5 + Math.floor(Math.random()*10);
-      const due = new Date(Date.now()+dueDays*86400000);
+      const id = `seed_g${g.id}_${idx+1}`;
+      const due = new Date(Date.UTC(2026, 4, 20 + g.id*2 + idx*5));
       cards[id] = {
         id, groupId:g.id,
         title:t.title,
@@ -1097,9 +1500,154 @@ function seedDefaults(){
 async function persist(){
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async ()=>{
-    const ok = await storageSet('thesis_tracker:cards', state.cards);
-    if(ok) showToast('Saved');
+    const ok = await storageSet(CARD_STORAGE_KEY, state.cards);
+    if(ok) showToast(cloud.status === 'online' || cloud.status === 'saved' ? 'Saved locally' : 'Saved locally');
+    queueCloudSave();
   },150);
+}
+
+function setCloudStatus(status, detail=''){
+  cloud.status = status;
+  const pill = document.getElementById('syncPill');
+  if(!pill) return;
+  pill.className = `sync-pill ${status}`;
+  const labels = {
+    local:'Local only',
+    connecting:'Connecting',
+    online:'Live sync',
+    syncing:'Saving',
+    saved:'Live saved',
+    error:'Sync error',
+  };
+  pill.textContent = detail || labels[status] || status;
+}
+
+async function connectCloud(){
+  if(!session || cloudStarted) return;
+  if(!FIREBASE_CONFIG?.apiKey || !FIREBASE_CONFIG?.projectId){
+    setCloudStatus('local');
+    return;
+  }
+  cloudStarted = true;
+  setCloudStatus('connecting');
+  try{
+    const base = `https://www.gstatic.com/firebasejs/${FIREBASE_SDK_VERSION}`;
+    const [appMod, fsMod] = await Promise.all([
+      import(`${base}/firebase-app.js`),
+      import(`${base}/firebase-firestore.js`),
+    ]);
+    cloud.modules = fsMod;
+    cloud.app = appMod.initializeApp(FIREBASE_CONFIG);
+    cloud.db = fsMod.getFirestore(cloud.app);
+    cloud.doc = fsMod.doc;
+    cloud.setDoc = fsMod.setDoc;
+    cloud.serverTimestamp = fsMod.serverTimestamp;
+    subscribeToAllowedGroups();
+    setCloudStatus('online');
+  }catch(err){
+    console.warn('[Firebase] thesis sync failed', err);
+    setCloudStatus('error', 'Sync setup failed');
+  }
+}
+
+function clearCloudSubscriptions(){
+  cloud.unsubscribers.forEach(unsub => {
+    try{ unsub(); }catch(e){}
+  });
+  cloud.unsubscribers = [];
+}
+
+function disconnectCloud(){
+  clearCloudSubscriptions();
+  cloudStarted = false;
+}
+
+function subscribeToAllowedGroups(){
+  clearCloudSubscriptions();
+  if(!session || !cloud.modules || !cloud.db) return;
+  const { onSnapshot, getDoc } = cloud.modules;
+  const groups = visibleGroups();
+  groups.forEach(g => {
+    const ref = cloud.doc(cloud.db, FIRESTORE_COLLECTION, groupDocId(g.id));
+    getDoc(ref).then(snap => {
+      if(!snap.exists()){
+        return writeGroupToCloud(g.id, { merge:true });
+      }
+    }).catch(err => console.warn('[Firebase] initial read failed', groupDocId(g.id), err));
+    const unsub = onSnapshot(ref, snap => {
+      if(!snap.exists()) return;
+      const data = snap.data() || {};
+      if(!data.cards) return;
+      cloudApplyingRemote = true;
+      replaceGroupCards(g.id, data.cards);
+      storageSet(CARD_STORAGE_KEY, state.cards);
+      cloudApplyingRemote = false;
+      rerender();
+      setCloudStatus('online');
+    }, err => {
+      console.warn('[Firebase] thesis snapshot failed', groupDocId(g.id), err);
+      setCloudStatus('error', 'Rules blocked sync');
+    });
+    cloud.unsubscribers.push(unsub);
+  });
+}
+
+function replaceGroupCards(gid, incomingCards){
+  Object.keys(state.cards).forEach(id => {
+    if(Number(state.cards[id]?.groupId) === Number(gid)) delete state.cards[id];
+  });
+  Object.entries(incomingCards || {}).forEach(([id, card]) => {
+    if(!card) return;
+    const normalized = {
+      ...card,
+      id: card.id || id,
+      groupId: Number(card.groupId || gid),
+      checklist: Array.isArray(card.checklist) ? card.checklist : [],
+      comments: Array.isArray(card.comments) ? card.comments : [],
+      tags: Array.isArray(card.tags) ? card.tags : [],
+    };
+    state.cards[normalized.id] = normalized;
+  });
+}
+
+function cardsForGroupObject(gid){
+  const cards = {};
+  Object.values(state.cards).forEach(card => {
+    if(Number(card.groupId) === Number(gid)){
+      cards[card.id] = card;
+    }
+  });
+  return cards;
+}
+
+function queueCloudSave(){
+  if(cloudApplyingRemote || !session || !cloud.setDoc || !cloud.db) return;
+  clearTimeout(cloudWriteTimer);
+  cloudWriteTimer = setTimeout(pushAllowedGroupsToCloud, 350);
+}
+
+async function pushAllowedGroupsToCloud(){
+  if(!session || !cloud.setDoc || !cloud.db) return;
+  setCloudStatus('syncing');
+  try{
+    await Promise.all(visibleGroups().map(g => writeGroupToCloud(g.id)));
+    setCloudStatus('saved');
+    showToast('Saved to live sync');
+  }catch(err){
+    console.warn('[Firebase] thesis write failed', err);
+    setCloudStatus('error', 'Sync write failed');
+  }
+}
+
+async function writeGroupToCloud(gid, options={}){
+  if(!cloud.setDoc || !cloud.db) return;
+  const ref = cloud.doc(cloud.db, FIRESTORE_COLLECTION, groupDocId(gid));
+  await cloud.setDoc(ref, {
+    schemaVersion:1,
+    groupId:gid,
+    cards:cardsForGroupObject(gid),
+    updatedAt:cloud.serverTimestamp ? cloud.serverTimestamp() : Date.now(),
+  }, { merge:!!options.merge });
 }
 
 // ───────────────────────────────────────────────────────────────────────────
@@ -1156,7 +1704,7 @@ function statsForGroup(gid){
 // ───────────────────────────────────────────────────────────────────────────
 function renderSidebar(){
   const list = document.getElementById('groupList');
-  list.innerHTML = GROUPS.map(g=>{
+  list.innerHTML = visibleGroups().map(g=>{
     const s = statsForGroup(g.id);
     const isActive = state.view === `group:${g.id}`;
     return `
@@ -1175,17 +1723,21 @@ function renderSidebar(){
     n.classList.toggle('active', n.dataset.view === state.view);
   });
 
-  document.getElementById('taskCount').textContent = `${getAllCards().length} tasks`;
+  document.getElementById('taskCount').textContent = `${visibleCards().length} tasks`;
 }
 
 // ───────────────────────────────────────────────────────────────────────────
 // RENDER : OVERVIEW
 // ───────────────────────────────────────────────────────────────────────────
 function renderOverview(){
+  if(!isSupervisor()){
+    renderBoard(sessionGroupId());
+    return;
+  }
   document.getElementById('pageTitle').textContent = 'Overview';
   document.getElementById('pageSub').textContent = 'All groups · all activity';
 
-  const allCards = getAllCards();
+  const allCards = visibleCards();
   const total = allCards.length;
   const done = allCards.filter(c=>c.col==='done').length;
   const inProgress = allCards.filter(c=>c.col==='progress').length;
@@ -1265,6 +1817,10 @@ function renderOverview(){
 // RENDER : KANBAN BOARD
 // ───────────────────────────────────────────────────────────────────────────
 function renderBoard(gid){
+  if(!canAccessGroup(gid)){
+    state.view = `group:${sessionGroupId()}`;
+    gid = sessionGroupId();
+  }
   const g = getGroup(gid);
   const s = statsForGroup(gid);
   document.getElementById('pageTitle').textContent = `Group ${g.id}`;
@@ -1407,10 +1963,14 @@ function passesFilters(c){
 // RENDER : ALL TASKS
 // ───────────────────────────────────────────────────────────────────────────
 function renderAllTasks(){
+  if(!isSupervisor()){
+    renderBoard(sessionGroupId());
+    return;
+  }
   document.getElementById('pageTitle').textContent = 'All Tasks';
   document.getElementById('pageSub').textContent = 'Master task list — every group, every assignee';
 
-  const cards = getAllCards().filter(passesFilters)
+  const cards = visibleCards().filter(passesFilters)
     .sort((a,b)=>{
       // overdue first, then by status order, then due date
       const ov = (isOverdue(b.dueDate,b.col)?1:0) - (isOverdue(a.dueDate,a.col)?1:0);
@@ -1463,6 +2023,7 @@ function openCard(id){
   currentCardId = id;
   const c = state.cards[id];
   if(!c) return;
+  if(!canAccessGroup(c.groupId)) return;
   const g = getGroup(c.groupId);
 
   const modal = document.getElementById('modalContent');
@@ -1634,7 +2195,7 @@ async function addComment(){
   const ta = document.getElementById('newComment');
   if(!ta.value.trim()) return;
   const c = state.cards[currentCardId];
-  c.comments.push({author:c.assignee||'Anonymous', text:ta.value.trim(), at:Date.now()});
+  c.comments.push({author:sessionLabel(), text:ta.value.trim(), at:Date.now()});
   c.updatedAt = Date.now();
   await persist();
   openCard(currentCardId);
@@ -1667,6 +2228,7 @@ async function deleteCard(){
 // CARD CREATION
 // ───────────────────────────────────────────────────────────────────────────
 async function addCard(col, gid){
+  if(!canAccessGroup(gid)) return;
   const title = prompt('Task title:');
   if(!title || !title.trim()) return;
   const g = getGroup(gid);
@@ -1694,6 +2256,11 @@ async function addCard(col, gid){
 
 function quickAddTask(){
   let gid;
+  if(!isSupervisor()){
+    gid = sessionGroupId();
+    addCard('todo', gid);
+    return;
+  }
   if(state.view.startsWith('group:')){
     gid = parseInt(state.view.split(':')[1]);
   }else{
@@ -1732,6 +2299,7 @@ function attachDnD(){
       const id = e.dataTransfer.getData('text/plain');
       const newCol = col.dataset.col;
       const c = state.cards[id];
+      if(c && !canAccessGroup(c.groupId)) return;
       if(c && c.col !== newCol){
         c.col = newCol;
         if(newCol==='done') c.progress = 100;
@@ -1747,7 +2315,7 @@ function attachDnD(){
 // CONTROLLERS
 // ───────────────────────────────────────────────────────────────────────────
 function setView(v){
-  state.view = v;
+  state.view = normalizeView(v);
   state.searchTerm = '';
   document.getElementById('searchInput').value = '';
   rerender();
@@ -1765,6 +2333,12 @@ function onSearch(){
 }
 
 function rerender(){
+  if(!session){
+    applySessionUi();
+    return;
+  }
+  state.view = normalizeView(state.view);
+  applySessionUi();
   renderSidebar();
   if(state.view==='overview') renderOverview();
   else if(state.view==='all-tasks') renderAllTasks();
@@ -1794,7 +2368,16 @@ document.addEventListener('keydown', e=>{
 // INIT
 // ───────────────────────────────────────────────────────────────────────────
 (async ()=>{
+  renderLoginGroups();
+  setLoginMode('group');
   await loadState();
+  if(session){
+    state.view = normalizeView(state.view);
+    applySessionUi();
+    connectCloud();
+  }else{
+    applySessionUi();
+  }
   rerender();
 })();
 </script>
