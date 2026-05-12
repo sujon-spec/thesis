@@ -22,7 +22,6 @@
   --accent:#d4a956;        /* warm gold */
   --accent-2:#e9c373;
   --accent-soft:rgba(212,169,86,.12);
-  --c-backlog:#6b7385;
   --c-todo:#5b8def;
   --c-progress:#e6a23c;
   --c-review:#a972d4;
@@ -57,7 +56,7 @@ input,textarea,select{font-family:inherit;color:inherit}
 ::-webkit-scrollbar-thumb:hover{background:var(--bg-4)}
 
 /* ── LAYOUT ── */
-.app{display:grid;grid-template-columns:280px 1fr;height:100vh;width:100%}
+.app{display:grid;grid-template-columns:280px 1fr;height:100vh;width:100%;min-width:0}
 .auth-locked .app,
 .auth-locked .modal-backdrop{display:none}
 .sidebar{
@@ -66,7 +65,8 @@ input,textarea,select{font-family:inherit;color:inherit}
   display:flex;flex-direction:column;
   overflow:hidden;
 }
-.main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg-0)}
+.main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg-0);min-width:0}
+#content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 
 /* ── SIDEBAR ── */
 .brand{
@@ -474,6 +474,7 @@ input,textarea,select{font-family:inherit;color:inherit}
   line-height:1.25;
   color:var(--ink);
   margin-bottom:6px;
+  overflow-wrap:anywhere;
 }
 .board-meta{
   font-size:12.5px;
@@ -646,11 +647,18 @@ input,textarea,select{font-family:inherit;color:inherit}
 }
 .card-meta-icons{
   display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;
   font-size:11px;
   color:var(--ink-mute);
 }
 .card-meta-icons span{display:inline-flex;align-items:center;gap:4px}
 .card-meta-icons .overdue{color:var(--c-red);font-weight:600}
+.task-link{
+  color:var(--accent-2);
+  text-decoration:none;
+  font-weight:700;
+}
+.task-link:hover{text-decoration:underline}
 .card-assignee{
   width:22px;height:22px;border-radius:50%;
   font-size:9.5px;font-weight:700;
@@ -898,7 +906,7 @@ input,textarea,select{font-family:inherit;color:inherit}
 .hero-sub{font-size:14px;color:var(--ink-dim);max-width:560px}
 .hero-stats{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:16px;
   margin-top:24px;
   position:relative;z-index:1;
@@ -1057,9 +1065,13 @@ input,textarea,select{font-family:inherit;color:inherit}
 
 /* ── RESPONSIVE ── */
 @media (max-width:900px){
+  html,body{height:auto;min-height:100%;overflow:auto;overflow-x:hidden}
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
-  .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:12px;gap:10px}
+  .main{overflow:visible}
+  #content{display:block;overflow:visible}
+  .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:12px;gap:10px;overflow:hidden}
+  .topbar > *{min-width:0}
   .search-box{width:100%;order:5}
   .session-pill,.sync-pill{height:30px}
   .login-card{grid-template-columns:1fr;max-width:520px}
@@ -1067,6 +1079,56 @@ input,textarea,select{font-family:inherit;color:inherit}
   .login-form{padding:28px}
   .modal-body{grid-template-columns:1fr}
   .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .overview{padding:16px}
+  .overview-hero{padding:22px 18px}
+  .hero-title{font-size:27px}
+  .group-grid{grid-template-columns:1fr}
+  .board-wrap,.board-header,.board-body,.kanban,.column,.card{max-width:100%;min-width:0}
+  .board-wrap{overflow:visible}
+  .board-header{padding:16px 14px}
+  .board-title-row{flex-direction:column;gap:16px}
+  .board-title{font-size:21px}
+  .board-meta-item{min-width:0;align-items:flex-start}
+  .board-meta-item span{min-width:0;overflow-wrap:anywhere}
+  .board-stats{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .stat-pill{min-width:0;padding:9px 10px}
+  .filter-row{
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    padding-bottom:3px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .filter-pill{white-space:nowrap;flex:0 0 auto}
+  .board-body{padding:12px 14px 24px;overflow:visible}
+  .kanban{min-width:0;width:100%;height:auto;flex-direction:column}
+  .column{width:auto;flex:1 1 auto;max-height:none}
+  .column-body{max-height:none;overflow:visible}
+  .task-row{
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+  .task-row > div:first-child{display:none}
+  .modal-backdrop{padding:18px 10px;overflow-x:hidden}
+  .modal{width:calc(100vw - 20px);max-width:calc(100vw - 20px)}
+  .modal-title-input,.modal-textarea,.modal-input,.modal-select{width:100%;min-width:0}
+  .modal-head,.modal-body,.modal-foot{padding-left:16px;padding-right:16px}
+}
+
+@media (max-width:560px){
+  .login-screen{padding:14px}
+  .login-form{padding:22px}
+  .login-tabs{grid-template-columns:1fr}
+  .topbar .btn{flex:1 1 auto;justify-content:center}
+  .hero-stats,.board-stats{grid-template-columns:1fr}
+  .group-card-head{gap:12px}
+  .group-card-pct{font-size:24px}
+  .modal-foot{flex-direction:column;align-items:stretch;gap:10px}
+  .modal-foot .btn-danger{width:100%}
 }
 </style>
 </head>
@@ -1224,14 +1286,14 @@ const FIREBASE_CONFIG = window.THESIS_FIREBASE_CONFIG || {
 const FIRESTORE_COLLECTION = 'thesistrack';
 
 const COLUMNS = [
-  {id:'backlog',  label:'Backlog',     color:'#6b7385'},
   {id:'todo',     label:'To Do',       color:'#5b8def'},
   {id:'progress', label:'In Progress', color:'#e6a23c'},
   {id:'review',   label:'Under Review',color:'#a972d4'},
   {id:'done',     label:'Done',        color:'#5cb88a'},
 ];
 
-const PRIORITY_COLORS = {High:'#e26666',Medium:'#e6a23c',Low:'#5cb88a'};
+const PRIORITIES = ['High','Medium'];
+const PRIORITY_COLORS = {High:'#e26666',Medium:'#e6a23c'};
 
 // Default seed tasks per group — phase-based research milestones
 const SEED_TASKS = {
@@ -1240,24 +1302,24 @@ const SEED_TASKS = {
     {title:'Define thermodynamic constraints for GNN architecture',col:'todo',priority:'High',progress:0,tags:['Methodology']},
     {title:'Collect liquid density datasets (NIST, DIPPR)',col:'progress',priority:'Medium',progress:40,tags:['Data']},
     {title:'Implement baseline GNN model in PyTorch Geometric',col:'todo',priority:'High',progress:0,tags:['Code']},
-    {title:'Write thesis proposal draft',col:'backlog',priority:'High',progress:0,tags:['Writing']},
+    {title:'Write thesis proposal draft',col:'todo',priority:'High',progress:0,tags:['Writing']},
   ],
   2:[
     {title:'Survey FDM machine learning literature',col:'progress',priority:'High',progress:70,tags:['Literature']},
     {title:'Set up FDM printer for sample generation',col:'todo',priority:'High',progress:0,tags:['Experiment']},
     {title:'Determine print parameters to vary',col:'progress',priority:'Medium',progress:30,tags:['Methodology']},
-    {title:'Tensile testing — sample batch 1',col:'backlog',priority:'High',progress:0,tags:['Experiment']},
+    {title:'Tensile testing — sample batch 1',col:'todo',priority:'High',progress:0,tags:['Experiment']},
     {title:'Acquire PLA and PLA-CF filament',col:'done',priority:'Medium',progress:100,tags:['Logistics']},
     {title:'Print specimens at varied parameters',col:'progress',priority:'High',progress:45,tags:['Experiment']},
     {title:'Tensile testing on Universal Testing Machine',col:'todo',priority:'High',progress:0,tags:['Experiment']},
     {title:'Build hybrid ML pipeline (CNN + classical)',col:'todo',priority:'High',progress:0,tags:['Code']},
-    {title:'Statistical analysis of results',col:'backlog',priority:'Medium',progress:0,tags:['Analysis']},
+    {title:'Statistical analysis of results',col:'todo',priority:'Medium',progress:0,tags:['Analysis']},
   ],
   3:[
     {title:'RDKit feature extraction from molecular structures',col:'progress',priority:'High',progress:55,tags:['Code','Data']},
     {title:'Curate skin permeability database',col:'review',priority:'High',progress:90,tags:['Data']},
     {title:'Train baseline ML models (RF, XGBoost)',col:'todo',priority:'Medium',progress:0,tags:['Code']},
-    {title:'Compare with neural network approach',col:'backlog',priority:'Medium',progress:0,tags:['Methodology']},
+    {title:'Compare with neural network approach',col:'todo',priority:'Medium',progress:0,tags:['Methodology']},
     {title:'Methodology section draft',col:'todo',priority:'Medium',progress:0,tags:['Writing']},
   ],
   4:[
@@ -1265,20 +1327,20 @@ const SEED_TASKS = {
     {title:'Implement Bloch-wave analysis solver',col:'progress',priority:'High',progress:70,tags:['Code','Methodology']},
     {title:'Design Hermitian metamaterial unit cell',col:'review',priority:'High',progress:85,tags:['Design']},
     {title:'Extend to non-Hermitian (PT-symmetric) cases',col:'todo',priority:'High',progress:0,tags:['Methodology']},
-    {title:'Verification against COMSOL simulations',col:'backlog',priority:'Medium',progress:0,tags:['Verification']},
+    {title:'Verification against COMSOL simulations',col:'todo',priority:'Medium',progress:0,tags:['Verification']},
   ],
   5:[
     {title:'Literature review — polymer nanocomposites for heat exchangers',col:'progress',priority:'High',progress:50,tags:['Literature']},
     {title:'Build dataset of nanocomposite formulations',col:'todo',priority:'High',progress:0,tags:['Data']},
-    {title:'ML feature engineering for thermal properties',col:'backlog',priority:'Medium',progress:0,tags:['Code']},
-    {title:'Optimization framework using Bayesian methods',col:'backlog',priority:'High',progress:0,tags:['Methodology']},
+    {title:'ML feature engineering for thermal properties',col:'todo',priority:'Medium',progress:0,tags:['Code']},
+    {title:'Optimization framework using Bayesian methods',col:'todo',priority:'High',progress:0,tags:['Methodology']},
   ],
   6:[
     {title:'Synthesize NiFe-LDH nanoparticles',col:'progress',priority:'High',progress:60,tags:['Synthesis']},
     {title:'Wood flour preparation and characterization',col:'progress',priority:'Medium',progress:40,tags:['Experiment']},
     {title:'Fabricate epoxy composite samples',col:'todo',priority:'High',progress:0,tags:['Experiment']},
-    {title:'Mechanical testing — tensile, flexural, impact',col:'backlog',priority:'High',progress:0,tags:['Experiment']},
-    {title:'DMA and TGA thermal analysis',col:'backlog',priority:'High',progress:0,tags:['Experiment']},
+    {title:'Mechanical testing — tensile, flexural, impact',col:'todo',priority:'High',progress:0,tags:['Experiment']},
+    {title:'DMA and TGA thermal analysis',col:'todo',priority:'High',progress:0,tags:['Experiment']},
   ],
 };
 
@@ -1316,9 +1378,14 @@ function readSession(){
     if(!saved) return null;
     const parsed = JSON.parse(saved);
     if(parsed?.role === 'group'){
-      const mapped = LEGACY_GROUP_ID_MAP[Number(parsed.groupId)];
-      if(!mapped) return null;
-      parsed.groupId = mapped;
+      const groupId = Number(parsed.groupId);
+      if(groupId < 1 || groupId > GROUPS.length){
+        const mapped = LEGACY_GROUP_ID_MAP[groupId];
+        if(!mapped) return null;
+        parsed.groupId = mapped;
+      }else{
+        parsed.groupId = groupId;
+      }
       localStorage.setItem(SESSION_KEY, JSON.stringify(parsed));
     }
     return parsed;
@@ -1469,6 +1536,51 @@ async function storageSet(key, val){
 
 function uid(){ return 'c_'+Math.random().toString(36).slice(2,11); }
 
+function isKnownColumn(col){
+  return COLUMNS.some(c => c.id === col);
+}
+
+function normalizeColumn(col){
+  return isKnownColumn(col) ? col : 'todo';
+}
+
+function normalizePriority(priority){
+  return PRIORITIES.includes(priority) ? priority : 'Medium';
+}
+
+function normalizeProgress(progress){
+  const n = Number(progress);
+  return Number.isFinite(n) ? Math.max(0, Math.min(100, Math.round(n))) : 0;
+}
+
+function resolveCurrentGroupId(card, fallbackGroupId){
+  const groupId = Number(card?.groupId || fallbackGroupId);
+  const title = String(card?.title || '');
+  if(groupId === 7) return 6;
+  if(groupId === 4 && /PLA|PLA-CF|Tensile|filament|Universal Testing|hybrid ML|FDM/i.test(title)) return 2;
+  if(groupId === 5 && /phononic|metamaterial/i.test(title)) return 4;
+  if(groupId === 6 && /polymer nanocomposite|heat exchanger/i.test(title)) return 5;
+  return GROUPS.some(g => g.id === groupId) ? groupId : null;
+}
+
+function normalizeCardForCurrentRules(card, id, fallbackGroupId){
+  if(!card) return null;
+  const groupId = resolveCurrentGroupId(card, fallbackGroupId);
+  if(!groupId) return null;
+  return {
+    ...card,
+    id: card.id || id,
+    groupId,
+    col: normalizeColumn(card.col),
+    priority: normalizePriority(card.priority),
+    progress: normalizeProgress(card.progress),
+    link: typeof card.link === 'string' ? card.link : '',
+    checklist: Array.isArray(card.checklist) ? card.checklist : [],
+    comments: Array.isArray(card.comments) ? card.comments : [],
+    tags: Array.isArray(card.tags) ? card.tags : [],
+  };
+}
+
 async function loadState(){
   const saved = await storageGet(CARD_STORAGE_KEY);
   if(saved && Object.keys(saved).length){
@@ -1497,6 +1609,7 @@ function seedDefaults(){
         col:t.col,
         priority:t.priority,
         progress:t.progress,
+        link:t.link || '',
         tags:t.tags || [],
         assignee:g.students[idx % g.students.length].name,
         dueDate:due.toISOString().slice(0,10),
@@ -1516,23 +1629,19 @@ function normalizeCardsForCurrentGroups(){
   const next = {};
   Object.entries(state.cards || {}).forEach(([id, card]) => {
     if(!card) return;
-    const mappedGroupId = LEGACY_GROUP_ID_MAP[Number(card.groupId)];
-    if(!mappedGroupId) {
+    const normalized = normalizeCardForCurrentRules(card, id, card.groupId);
+    if(!normalized) {
       changed = true;
       return;
     }
-    const normalized = {
-      ...card,
-      id: card.id || id,
-      groupId: mappedGroupId,
-      checklist: Array.isArray(card.checklist) ? card.checklist : [],
-      comments: Array.isArray(card.comments) ? card.comments : [],
-      tags: Array.isArray(card.tags) ? card.tags : [],
-    };
-    if(Number(card.groupId) !== mappedGroupId) changed = true;
+    if(Number(card.groupId) !== normalized.groupId) changed = true;
+    if(card.col !== normalized.col) changed = true;
+    if(card.priority !== normalized.priority) changed = true;
+    if(normalizeProgress(card.progress) !== normalized.progress) changed = true;
+    if(typeof card.link !== 'string') changed = true;
     let nextId = normalized.id;
     while(next[nextId]){
-      nextId = `${mappedGroupId}_${nextId}`;
+      nextId = `${normalized.groupId}_${nextId}`;
       changed = true;
     }
     normalized.id = nextId;
@@ -1546,10 +1655,15 @@ function needsLegacyGroupMigration(cards){
   return Object.values(cards || {}).some(card => {
     const groupId = Number(card?.groupId);
     const title = String(card?.title || '');
-    if(groupId === 7 || groupId > GROUPS.length) return true;
+    const currentGroupId = resolveCurrentGroupId(card, groupId);
+    if(!currentGroupId || currentGroupId !== groupId) return true;
     if(groupId === 4 && /PLA|PLA-CF|Tensile|filament|Universal Testing|hybrid ML/i.test(title)) return true;
     if(groupId === 5 && /phononic|metamaterial/i.test(title)) return true;
     if(groupId === 6 && /polymer nanocomposite|heat exchanger/i.test(title)) return true;
+    if(!isKnownColumn(card?.col)) return true;
+    if(!PRIORITIES.includes(card?.priority)) return true;
+    if(typeof card?.link !== 'string') return true;
+    if(!Array.isArray(card?.checklist) || !Array.isArray(card?.comments) || !Array.isArray(card?.tags)) return true;
     return false;
   });
 }
@@ -1654,15 +1768,8 @@ function replaceGroupCards(gid, incomingCards){
     if(Number(state.cards[id]?.groupId) === Number(gid)) delete state.cards[id];
   });
   Object.entries(incomingCards || {}).forEach(([id, card]) => {
-    if(!card) return;
-    const normalized = {
-      ...card,
-      id: card.id || id,
-      groupId: Number(card.groupId || gid),
-      checklist: Array.isArray(card.checklist) ? card.checklist : [],
-      comments: Array.isArray(card.comments) ? card.comments : [],
-      tags: Array.isArray(card.tags) ? card.tags : [],
-    };
+    const normalized = normalizeCardForCurrentRules(card, id, gid);
+    if(!normalized) return;
     state.cards[normalized.id] = normalized;
   });
 }
@@ -1670,8 +1777,9 @@ function replaceGroupCards(gid, incomingCards){
 function cardsForGroupObject(gid){
   const cards = {};
   Object.values(state.cards).forEach(card => {
-    if(Number(card.groupId) === Number(gid)){
-      cards[card.id] = card;
+    const normalized = normalizeCardForCurrentRules(card, card?.id, gid);
+    if(normalized && Number(normalized.groupId) === Number(gid)){
+      cards[normalized.id] = normalized;
     }
   });
   return cards;
@@ -1700,7 +1808,7 @@ async function writeGroupToCloud(gid, options={}){
   if(!cloud.setDoc || !cloud.db) return;
   const ref = cloud.doc(cloud.db, FIRESTORE_COLLECTION, groupDocId(gid));
   await cloud.setDoc(ref, {
-    schemaVersion:1,
+    schemaVersion:2,
     groupId:gid,
     cards:cardsForGroupObject(gid),
     updatedAt:cloud.serverTimestamp ? cloud.serverTimestamp() : Date.now(),
@@ -1737,6 +1845,22 @@ function colorForName(name){
 function escapeHtml(s){
   return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+function normalizeUrl(raw){
+  const value = String(raw || '').trim();
+  if(!value) return '';
+  if(/^https?:\/\//i.test(value)) return value;
+  if(/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(value)) return `https://${value}`;
+  return '';
+}
+function linkLabel(raw){
+  const url = normalizeUrl(raw);
+  if(!url) return 'Open link';
+  try{
+    return new URL(url).hostname.replace(/^www\./,'');
+  }catch(e){
+    return 'Open link';
+  }
+}
 function showToast(msg='Saved'){
   const t = document.getElementById('toast');
   document.getElementById('toastText').textContent = msg;
@@ -1750,10 +1874,12 @@ function statsForGroup(gid){
   const total = cards.length;
   const done = cards.filter(c=>c.col==='done').length;
   const inProgress = cards.filter(c=>c.col==='progress').length;
+  const review = cards.filter(c=>c.col==='review').length;
+  const linked = cards.filter(c=>normalizeUrl(c.link)).length;
   const overdue = cards.filter(c=>isOverdue(c.dueDate, c.col)).length;
   const pct = total ? Math.round(done/total*100) : 0;
   const avgProgress = total ? Math.round(cards.reduce((s,c)=>s+c.progress,0)/total) : 0;
-  return {total,done,inProgress,overdue,pct,avgProgress};
+  return {total,done,inProgress,review,linked,overdue,pct,avgProgress};
 }
 
 // ───────────────────────────────────────────────────────────────────────────
@@ -1771,7 +1897,7 @@ function renderSidebar(){
           <div class="group-name">Group ${g.id} · ${escapeHtml(g.short)}</div>
           <div class="group-meta">${s.done}/${s.total} done · ${g.students.length} member${g.students.length>1?'s':''}</div>
         </div>
-        <div class="group-progress"><div class="group-progress-fill" style="width:${s.pct}%"></div></div>
+        ${isSupervisor() ? `<div class="group-progress"><div class="group-progress-fill" style="width:${s.pct}%"></div></div>` : ''}
       </div>`;
   }).join('');
 
@@ -1797,7 +1923,7 @@ function renderOverview(){
   const allCards = visibleCards();
   const total = allCards.length;
   const done = allCards.filter(c=>c.col==='done').length;
-  const inProgress = allCards.filter(c=>c.col==='progress').length;
+  const linked = allCards.filter(c=>normalizeUrl(c.link)).length;
   const overdue = allCards.filter(c=>isOverdue(c.dueDate, c.col)).length;
   const pct = total ? Math.round(done/total*100) : 0;
 
@@ -1819,6 +1945,10 @@ function renderOverview(){
           <div class="hero-stat">
             <div class="hero-stat-label">Overall Progress</div>
             <div class="hero-stat-val acc">${pct}%</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Evidence Links</div>
+            <div class="hero-stat-val">${linked}</div>
           </div>
           <div class="hero-stat">
             <div class="hero-stat-label">Overdue</div>
@@ -1860,7 +1990,7 @@ function renderOverview(){
               <div class="group-card-stats">
                 <span><strong>${s.total}</strong>tasks</span>
                 <span><strong>${s.done}</strong>done</span>
-                <span><strong>${s.inProgress}</strong>active</span>
+                <span><strong>${s.linked}</strong>linked</span>
                 <span style="color:${s.overdue?'var(--c-red)':'var(--ink-mute)'}"><strong>${s.overdue}</strong>overdue</span>
               </div>
             </div>`;
@@ -1884,6 +2014,16 @@ function renderBoard(gid){
   document.getElementById('pageSub').textContent = g.deptShort + ' · ' + g.dept;
 
   const cards = getCardsForGroup(gid);
+  const progressStat = isSupervisor() ? `
+            <div class="stat-pill">
+              <div class="stat-pill-label">Progress</div>
+              <div class="stat-pill-value acc">${s.pct}%</div>
+            </div>` : '';
+  const reviewStat = !isSupervisor() ? `
+            <div class="stat-pill">
+              <div class="stat-pill-label">Review</div>
+              <div class="stat-pill-value blue">${s.review}</div>
+            </div>` : '';
 
   const html = `
     <div class="board-wrap">
@@ -1903,10 +2043,7 @@ function renderBoard(gid){
           </div>
 
           <div class="board-stats">
-            <div class="stat-pill">
-              <div class="stat-pill-label">Progress</div>
-              <div class="stat-pill-value acc">${s.pct}%</div>
-            </div>
+            ${progressStat}
             <div class="stat-pill">
               <div class="stat-pill-label">Total</div>
               <div class="stat-pill-value">${s.total}</div>
@@ -1920,6 +2057,11 @@ function renderBoard(gid){
               <div class="stat-pill-value green">${s.done}</div>
             </div>
             <div class="stat-pill">
+              <div class="stat-pill-label">Evidence</div>
+              <div class="stat-pill-value acc">${s.linked}/${s.total}</div>
+            </div>
+            ${reviewStat}
+            <div class="stat-pill">
               <div class="stat-pill-label">Overdue</div>
               <div class="stat-pill-value ${s.overdue?'red':''}">${s.overdue}</div>
             </div>
@@ -1931,7 +2073,6 @@ function renderBoard(gid){
           <button class="filter-pill ${state.filterPriority===null?'active':''}" onclick="setFilter('priority',null)">All Priority</button>
           <button class="filter-pill ${state.filterPriority==='High'?'active':''}" onclick="setFilter('priority','High')">High</button>
           <button class="filter-pill ${state.filterPriority==='Medium'?'active':''}" onclick="setFilter('priority','Medium')">Medium</button>
-          <button class="filter-pill ${state.filterPriority==='Low'?'active':''}" onclick="setFilter('priority','Low')">Low</button>
           <span style="margin:0 6px;color:var(--ink-mute)">·</span>
           <button class="filter-pill ${state.filterAssignee===null?'active':''}" onclick="setFilter('assignee',null)">All Members</button>
           ${g.students.map(st=>`
@@ -1976,6 +2117,7 @@ function renderCard(c){
   const overdue = isOverdue(c.dueDate, c.col);
   const checklistDone = c.checklist.filter(i=>i.done).length;
   const priorityColor = PRIORITY_COLORS[c.priority] || 'transparent';
+  const linkUrl = normalizeUrl(c.link);
   return `
     <div class="card" draggable="true" data-id="${c.id}" onclick="openCard('${c.id}')">
       <div class="card-priority-bar" style="background:${priorityColor}"></div>
@@ -1984,9 +2126,10 @@ function renderCard(c){
         ${c.tags.map(t=>`<span class="card-tag" style="background:var(--bg-3);color:var(--ink-dim)">${escapeHtml(t)}</span>`).join('')}
       </div>
       <div class="card-title">${escapeHtml(c.title)}</div>
-      ${c.progress>0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${c.progress}%"></div></div>` : ''}
+      ${isSupervisor() && c.progress>0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${c.progress}%"></div></div>` : ''}
       <div class="card-footer">
         <div class="card-meta-icons">
+          ${linkUrl ? `<a class="task-link" href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(linkLabel(c.link))}</a>` : ''}
           ${c.dueDate ? `<span class="${overdue?'overdue':''}">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             ${fmtDate(c.dueDate)}
@@ -2010,7 +2153,7 @@ function passesFilters(c){
   if(state.filterAssignee && c.assignee !== state.filterAssignee) return false;
   if(state.searchTerm){
     const t = state.searchTerm.toLowerCase();
-    const hay = (c.title+' '+(c.description||'')+' '+(c.assignee||'')+' '+(c.tags||[]).join(' ')).toLowerCase();
+    const hay = (c.title+' '+(c.description||'')+' '+(c.assignee||'')+' '+(c.link||'')+' '+(c.tags||[]).join(' ')).toLowerCase();
     if(!hay.includes(t)) return false;
   }
   return true;
@@ -2032,7 +2175,7 @@ function renderAllTasks(){
       // overdue first, then by status order, then due date
       const ov = (isOverdue(b.dueDate,b.col)?1:0) - (isOverdue(a.dueDate,a.col)?1:0);
       if(ov) return ov;
-      const colOrder = ['progress','review','todo','backlog','done'];
+      const colOrder = ['progress','review','todo','done'];
       return colOrder.indexOf(a.col) - colOrder.indexOf(b.col);
     });
 
@@ -2045,16 +2188,18 @@ function renderAllTasks(){
       <div style="display:flex;flex-direction:column;gap:8px;max-width:980px">
         ${cards.length ? cards.map(c=>{
           const g = getGroup(c.groupId);
-          const col = COLUMNS.find(co=>co.id===c.col);
+          const col = COLUMNS.find(co=>co.id===c.col) || COLUMNS[0];
           const overdue = isOverdue(c.dueDate, c.col);
+          const linkUrl = normalizeUrl(c.link);
           return `
-            <div class="card" style="cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto auto auto auto;gap:14px;align-items:center" onclick="openCard('${c.id}')">
+            <div class="card task-row" style="cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto auto auto auto;gap:14px;align-items:center" onclick="openCard('${c.id}')">
               <div style="width:8px;height:32px;border-radius:3px;background:${g.color}"></div>
               <div>
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
                   <span class="card-tag" style="background:${g.accent};color:${g.color}">G${g.id}</span>
                   <span class="card-tag" style="background:var(--bg-3);color:${col.color}">${col.label}</span>
                   ${c.priority?`<span class="card-tag" style="background:var(--bg-3);color:${PRIORITY_COLORS[c.priority]}">${c.priority}</span>`:''}
+                  ${linkUrl?`<a class="task-link" href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(linkLabel(c.link))}</a>`:''}
                 </div>
                 <div style="font-size:13.5px;font-weight:500">${escapeHtml(c.title)}</div>
               </div>
@@ -2082,6 +2227,15 @@ function openCard(id){
   if(!c) return;
   if(!canAccessGroup(c.groupId)) return;
   const g = getGroup(c.groupId);
+  const linkUrl = normalizeUrl(c.link);
+  const progressSection = isSupervisor() ? `
+        <div class="modal-section">
+          <div class="modal-section-label">Progress · ${c.progress}%</div>
+          <div class="modal-progress">
+            <input type="range" min="0" max="100" step="5" value="${c.progress}" oninput="updateProgress(this.value)" />
+            <span class="modal-progress-val" id="progVal">${c.progress}%</span>
+          </div>
+        </div>` : '';
 
   const modal = document.getElementById('modalContent');
   modal.innerHTML = `
@@ -2107,12 +2261,12 @@ function openCard(id){
         </div>
 
         <div class="modal-section">
-          <div class="modal-section-label">Progress · ${c.progress}%</div>
-          <div class="modal-progress">
-            <input type="range" min="0" max="100" step="5" value="${c.progress}" oninput="updateProgress(this.value)" />
-            <span class="modal-progress-val" id="progVal">${c.progress}%</span>
-          </div>
+          <div class="modal-section-label">Task Link</div>
+          <input type="url" class="modal-input" value="${escapeHtml(c.link||'')}" oninput="updateField('link',this.value)" placeholder="Drive, Overleaf, GitHub, dataset, or draft link" />
+          ${linkUrl ? `<div style="margin-top:8px;font-size:12px"><a class="task-link" href="${escapeHtml(linkUrl)}" target="_blank" rel="noopener">Open ${escapeHtml(linkLabel(c.link))}</a></div>` : ''}
         </div>
+
+        ${progressSection}
 
         <div class="modal-section">
           <div class="modal-section-label">Checklist (${c.checklist.filter(i=>i.done).length}/${c.checklist.length})</div>
@@ -2162,7 +2316,7 @@ function openCard(id){
         <div class="modal-section">
           <div class="modal-section-label">Priority</div>
           <select class="modal-select" onchange="updateField('priority',this.value)">
-            ${['High','Medium','Low'].map(p=>`<option value="${p}" ${p===c.priority?'selected':''}>${p}</option>`).join('')}
+            ${PRIORITIES.map(p=>`<option value="${p}" ${p===c.priority?'selected':''}>${p}</option>`).join('')}
           </select>
         </div>
 
@@ -2203,16 +2357,21 @@ function closeModal(){
 async function updateField(field, val){
   const c = state.cards[currentCardId];
   if(!c) return;
+  if(field === 'col') val = normalizeColumn(val);
+  if(field === 'priority') val = normalizePriority(val);
   c[field] = val;
+  if(field === 'col' && val === 'done') c.progress = 100;
   c.updatedAt = Date.now();
   await persist();
 }
 
 async function updateProgress(val){
+  if(!isSupervisor()) return;
   const c = state.cards[currentCardId];
-  c.progress = parseInt(val,10);
+  c.progress = normalizeProgress(val);
   c.updatedAt = Date.now();
-  document.getElementById('progVal').textContent = c.progress+'%';
+  const progVal = document.getElementById('progVal');
+  if(progVal) progVal.textContent = c.progress+'%';
   await persist();
 }
 
@@ -2294,9 +2453,10 @@ async function addCard(col, gid){
     id, groupId:gid,
     title:title.trim(),
     description:'',
-    col,
+    col:normalizeColumn(col),
     priority:'Medium',
     progress:0,
+    link:'',
     tags:[],
     assignee:g.students[0].name,
     dueDate:'',
@@ -2354,7 +2514,7 @@ function attachDnD(){
       e.preventDefault();
       col.classList.remove('drag-over');
       const id = e.dataTransfer.getData('text/plain');
-      const newCol = col.dataset.col;
+      const newCol = normalizeColumn(col.dataset.col);
       const c = state.cards[id];
       if(c && !canAccessGroup(c.groupId)) return;
       if(c && c.col !== newCol){

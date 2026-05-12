@@ -1,12 +1,12 @@
 # IUT Thesis Tracker
 
-Student thesis group tracker with group login, supervisor login, task boards, comments, progress tracking, and optional Firestore live sync.
+Student thesis group tracker with group login, supervisor login, task boards, comments, supervisor-side progress tracking, task evidence links, and optional Firestore live sync.
 
 ## Login Passwords
 
 - Supervisor: `Ariya@2019`
 - Group 1: `ThermoGNN@2026`
-- Group 2: `FDMPropertyPLA#2026`
+- Group 2: `FDMPropertyPLA#2026`, `FDMPropertyML#2026`, `PLATensileML#2026`
 - Group 3: `SkinPermML@2026`
 - Group 4: `PhononicMeta@2026`
 - Group 5: `PolyNanoOpt#2026`
