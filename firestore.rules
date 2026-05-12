@@ -6,7 +6,7 @@ service cloud.firestore {
     // Thesis tracker: each group is stored in a separate document.
     // The app only subscribes to the logged-in student group's document.
     match /thesistrack/{groupId} {
-      allow read, write: if groupId.matches('group-0[1-7]');
+      allow read, write: if groupId.matches('group-0[1-6]');
     }
   }
 }

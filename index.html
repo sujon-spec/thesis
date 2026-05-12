@@ -1193,24 +1193,23 @@ input,textarea,select{font-family:inherit;color:inherit}
 // ───────────────────────────────────────────────────────────────────────────
 const GROUPS = [
   {id:1,color:'#5b8def',accent:'rgba(91,141,239,.15)',title:'Thermodynamics-Informed Graph Neural Networks for Liquid Density Prediction',short:'Thermodynamics GNN',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Muttakia Sarah Hossain',id:'210011154'}]},
-  {id:2,color:'#e6a23c',accent:'rgba(230,162,60,.15)',title:'Data-Driven Modeling and Experimental Validation of FDM Mechanical Properties',short:'FDM Property ML',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Abu Ahmed Jobayer',id:'—'}]},
+  {id:2,color:'#e6a23c',accent:'rgba(230,162,60,.15)',title:'Data-Driven Modeling and Experimental Validation of FDM and PLA/PLA-CF Mechanical Properties',short:'FDM & PLA Property ML',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Abu Ahmed Jobayer',id:'—'},{name:'Mubasshir Rahib Joutha',id:'21001275'},{name:'Nabil Mahmood Rahman',id:'210011174'},{name:'Abdullah Nomaan',id:'210011106'}]},
   {id:3,color:'#a972d4',accent:'rgba(169,114,212,.15)',title:'RDKit-Integrated ML Framework for Skin Permeability Prediction',short:'Skin Permeability ML',dept:'B.Sc. Industrial & Production Engineering',deptShort:'IPE',students:[{name:'MD. Adnan Sami',id:'210012123'},{name:'Tasfia Zaman',id:'210012145'}]},
-  {id:4,color:'#5cb88a',accent:'rgba(92,184,138,.15)',title:'Predictive Modeling of Tensile Strength in FDM-Printed PLA & PLA-CF Composites',short:'PLA Tensile ML',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Mubasshir Rahib Joutha',id:'21001275'},{name:'Nabil Mahmood Rahman',id:'210011174'},{name:'Abdullah Nomaan',id:'210011106'}]},
-  {id:5,color:'#e26666',accent:'rgba(226,102,102,.15)',title:'Reproducible Autonomous Design of Hermitian and Non-Hermitian Phononic Metamaterials',short:'Phononic Metamaterials',dept:'B.Sc. Industrial & Production Engineering',deptShort:'IPE',students:[{name:'Galib Muhammad Kassaf',id:'200012113'},{name:'Safrat Samia',id:'210012128'},{name:'Mehnaz Tamanna Oyeshi',id:'210012162'}]},
-  {id:6,color:'#3ec9c0',accent:'rgba(62,201,192,.15)',title:'Machine Learning-Driven Optimization of Polymer Nanocomposites for Heat Exchangers',short:'Polymer Nanocomposite Opt.',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Junaid Rahman Fahim',id:'210011267'},{name:'Tasfia Chowdhury',id:'210011164'}]},
-  {id:7,color:'#d4a956',accent:'rgba(212,169,86,.15)',title:'Effect of NiFe-LDH on Wood Flour-Reinforced Epoxy Hybrid Nanocomposites',short:'NiFe-LDH Epoxy Composite',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Juhair Mahatab Ullah Aninda',id:'210011254'},{name:'Nafis Ayman',id:'210011281'}]},
+  {id:4,color:'#e26666',accent:'rgba(226,102,102,.15)',title:'Reproducible Autonomous Design of Hermitian and Non-Hermitian Phononic Metamaterials',short:'Phononic Metamaterials',dept:'B.Sc. Industrial & Production Engineering',deptShort:'IPE',students:[{name:'Galib Muhammad Kassaf',id:'200012113'},{name:'Safrat Samia',id:'210012128'},{name:'Mehnaz Tamanna Oyeshi',id:'210012162'}]},
+  {id:5,color:'#3ec9c0',accent:'rgba(62,201,192,.15)',title:'Machine Learning-Driven Optimization of Polymer Nanocomposites for Heat Exchangers',short:'Polymer Nanocomposite Opt.',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Junaid Rahman Fahim',id:'210011267'},{name:'Tasfia Chowdhury',id:'210011164'}]},
+  {id:6,color:'#d4a956',accent:'rgba(212,169,86,.15)',title:'Effect of NiFe-LDH on Wood Flour-Reinforced Epoxy Hybrid Nanocomposites',short:'NiFe-LDH Epoxy Composite',dept:'B.Sc. Mechanical Engineering',deptShort:'ME',students:[{name:'Juhair Mahatab Ullah Aninda',id:'210011254'},{name:'Nafis Ayman',id:'210011281'}]},
 ];
 
 const SUPERVISOR_PASSWORD = 'Ariya@2019';
 const GROUP_PASSWORDS = {
-  1:'ThermoGNN@2026',
-  2:'FDMPropertyML#2026',
-  3:'SkinPermML@2026',
-  4:'PLATensileML#2026',
-  5:'PhononicMeta@2026',
-  6:'PolyNanoOpt#2026',
-  7:'NiFeLDH@2026',
+  1:['ThermoGNN@2026'],
+  2:['FDMPropertyPLA#2026','FDMPropertyML#2026','PLATensileML#2026'],
+  3:['SkinPermML@2026'],
+  4:['PhononicMeta@2026'],
+  5:['PolyNanoOpt#2026'],
+  6:['NiFeLDH@2026'],
 };
+const LEGACY_GROUP_ID_MAP = {1:1,2:2,3:3,4:2,5:4,6:5,7:6};
 const SESSION_KEY = 'thesis_tracker:session';
 const CARD_STORAGE_KEY = 'thesis_tracker:cards';
 const FIREBASE_SDK_VERSION = '10.12.5';
@@ -1248,6 +1247,11 @@ const SEED_TASKS = {
     {title:'Set up FDM printer for sample generation',col:'todo',priority:'High',progress:0,tags:['Experiment']},
     {title:'Determine print parameters to vary',col:'progress',priority:'Medium',progress:30,tags:['Methodology']},
     {title:'Tensile testing — sample batch 1',col:'backlog',priority:'High',progress:0,tags:['Experiment']},
+    {title:'Acquire PLA and PLA-CF filament',col:'done',priority:'Medium',progress:100,tags:['Logistics']},
+    {title:'Print specimens at varied parameters',col:'progress',priority:'High',progress:45,tags:['Experiment']},
+    {title:'Tensile testing on Universal Testing Machine',col:'todo',priority:'High',progress:0,tags:['Experiment']},
+    {title:'Build hybrid ML pipeline (CNN + classical)',col:'todo',priority:'High',progress:0,tags:['Code']},
+    {title:'Statistical analysis of results',col:'backlog',priority:'Medium',progress:0,tags:['Analysis']},
   ],
   3:[
     {title:'RDKit feature extraction from molecular structures',col:'progress',priority:'High',progress:55,tags:['Code','Data']},
@@ -1257,26 +1261,19 @@ const SEED_TASKS = {
     {title:'Methodology section draft',col:'todo',priority:'Medium',progress:0,tags:['Writing']},
   ],
   4:[
-    {title:'Acquire PLA and PLA-CF filament',col:'done',priority:'Medium',progress:100,tags:['Logistics']},
-    {title:'Print specimens at varied parameters',col:'progress',priority:'High',progress:45,tags:['Experiment']},
-    {title:'Tensile testing on Universal Testing Machine',col:'todo',priority:'High',progress:0,tags:['Experiment']},
-    {title:'Build hybrid ML pipeline (CNN + classical)',col:'todo',priority:'High',progress:0,tags:['Code']},
-    {title:'Statistical analysis of results',col:'backlog',priority:'Medium',progress:0,tags:['Analysis']},
-  ],
-  5:[
     {title:'Review literature on phononic metamaterials',col:'done',priority:'High',progress:100,tags:['Literature']},
     {title:'Implement Bloch-wave analysis solver',col:'progress',priority:'High',progress:70,tags:['Code','Methodology']},
     {title:'Design Hermitian metamaterial unit cell',col:'review',priority:'High',progress:85,tags:['Design']},
     {title:'Extend to non-Hermitian (PT-symmetric) cases',col:'todo',priority:'High',progress:0,tags:['Methodology']},
     {title:'Verification against COMSOL simulations',col:'backlog',priority:'Medium',progress:0,tags:['Verification']},
   ],
-  6:[
+  5:[
     {title:'Literature review — polymer nanocomposites for heat exchangers',col:'progress',priority:'High',progress:50,tags:['Literature']},
     {title:'Build dataset of nanocomposite formulations',col:'todo',priority:'High',progress:0,tags:['Data']},
     {title:'ML feature engineering for thermal properties',col:'backlog',priority:'Medium',progress:0,tags:['Code']},
     {title:'Optimization framework using Bayesian methods',col:'backlog',priority:'High',progress:0,tags:['Methodology']},
   ],
-  7:[
+  6:[
     {title:'Synthesize NiFe-LDH nanoparticles',col:'progress',priority:'High',progress:60,tags:['Synthesis']},
     {title:'Wood flour preparation and characterization',col:'progress',priority:'Medium',progress:40,tags:['Experiment']},
     {title:'Fabricate epoxy composite samples',col:'todo',priority:'High',progress:0,tags:['Experiment']},
@@ -1316,7 +1313,15 @@ let cloud = {
 function readSession(){
   try{
     const saved = localStorage.getItem(SESSION_KEY);
-    return saved ? JSON.parse(saved) : null;
+    if(!saved) return null;
+    const parsed = JSON.parse(saved);
+    if(parsed?.role === 'group'){
+      const mapped = LEGACY_GROUP_ID_MAP[Number(parsed.groupId)];
+      if(!mapped) return null;
+      parsed.groupId = mapped;
+      localStorage.setItem(SESSION_KEY, JSON.stringify(parsed));
+    }
+    return parsed;
   }catch(e){ return null; }
 }
 
@@ -1330,6 +1335,11 @@ function sessionGroupId(){
 
 function canAccessGroup(gid){
   return isSupervisor() || Number(gid) === sessionGroupId();
+}
+
+function isGroupPasswordValid(groupId, password){
+  const allowed = GROUP_PASSWORDS[groupId] || [];
+  return allowed.includes(password);
 }
 
 function visibleGroups(){
@@ -1387,7 +1397,7 @@ function handleLogin(event){
   }
 
   const groupId = Number(document.getElementById('loginGroup').value);
-  if(password === GROUP_PASSWORDS[groupId]){
+  if(isGroupPasswordValid(groupId, password)){
     startSession({ role:'group', groupId });
   }else{
     error.textContent = 'Wrong group password. Please use the password issued for this thesis project.';
@@ -1463,6 +1473,10 @@ async function loadState(){
   const saved = await storageGet(CARD_STORAGE_KEY);
   if(saved && Object.keys(saved).length){
     state.cards = saved;
+    if(needsLegacyGroupMigration(state.cards)){
+      const migrated = normalizeCardsForCurrentGroups();
+      if(migrated) await storageSet(CARD_STORAGE_KEY, state.cards);
+    }
   }else{
     seedDefaults();
     await persist();
@@ -1495,6 +1509,49 @@ function seedDefaults(){
     });
   });
   state.cards = cards;
+}
+
+function normalizeCardsForCurrentGroups(){
+  let changed = false;
+  const next = {};
+  Object.entries(state.cards || {}).forEach(([id, card]) => {
+    if(!card) return;
+    const mappedGroupId = LEGACY_GROUP_ID_MAP[Number(card.groupId)];
+    if(!mappedGroupId) {
+      changed = true;
+      return;
+    }
+    const normalized = {
+      ...card,
+      id: card.id || id,
+      groupId: mappedGroupId,
+      checklist: Array.isArray(card.checklist) ? card.checklist : [],
+      comments: Array.isArray(card.comments) ? card.comments : [],
+      tags: Array.isArray(card.tags) ? card.tags : [],
+    };
+    if(Number(card.groupId) !== mappedGroupId) changed = true;
+    let nextId = normalized.id;
+    while(next[nextId]){
+      nextId = `${mappedGroupId}_${nextId}`;
+      changed = true;
+    }
+    normalized.id = nextId;
+    next[nextId] = normalized;
+  });
+  state.cards = next;
+  return changed;
+}
+
+function needsLegacyGroupMigration(cards){
+  return Object.values(cards || {}).some(card => {
+    const groupId = Number(card?.groupId);
+    const title = String(card?.title || '');
+    if(groupId === 7 || groupId > GROUPS.length) return true;
+    if(groupId === 4 && /PLA|PLA-CF|Tensile|filament|Universal Testing|hybrid ML/i.test(title)) return true;
+    if(groupId === 5 && /phononic|metamaterial/i.test(title)) return true;
+    if(groupId === 6 && /polymer nanocomposite|heat exchanger/i.test(title)) return true;
+    return false;
+  });
 }
 
 async function persist(){
@@ -1748,7 +1805,7 @@ function renderOverview(){
     <div class="overview">
       <div class="overview-hero">
         <div class="hero-eyebrow">2024–2025 · Mechanical & Production Engineering</div>
-        <div class="hero-title serif">Seven research missions, in motion.</div>
+        <div class="hero-title serif">Six research missions, in motion.</div>
         <div class="hero-sub">Track every milestone, task, and contribution across all thesis groups in one workspace.</div>
         <div class="hero-stats">
           <div class="hero-stat">
@@ -2264,9 +2321,9 @@ function quickAddTask(){
   if(state.view.startsWith('group:')){
     gid = parseInt(state.view.split(':')[1]);
   }else{
-    const choice = prompt('Which group? Enter 1–7:');
+    const choice = prompt(`Which group? Enter 1-${GROUPS.length}:`);
     gid = parseInt(choice);
-    if(!gid || gid<1 || gid>7){ alert('Pick a number 1–7'); return; }
+    if(!gid || gid<1 || gid>GROUPS.length){ alert(`Pick a number 1-${GROUPS.length}`); return; }
   }
   addCard('todo', gid);
 }
